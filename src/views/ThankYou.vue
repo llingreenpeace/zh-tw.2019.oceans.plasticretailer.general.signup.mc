@@ -1,0 +1,236 @@
+<template>
+  <div class="thank">
+    <div class="content-container NotoSansCJKtc-Regular">
+      <div class="title">
+        <p class="EngGoth">THANK YOU</p>
+      </div>
+      <div class="subtitle">
+        <p>感謝您參加連署，成為推動源頭減塑的力量！</p>
+      </div>
+      <div class="text-1">
+        <p>過去我們與其他團體成功推動<strong>禁用塑膠微粒</strong>以及實施<strong>限用一次性塑膠政策</strong>，這場「減塑運動」會一直持續下去，實踐源頭減塑，需要您進一步的支持，一起為減塑拿下更多里程碑!</p>
+      </div>
+      <div class="text-2">
+        <p>實踐源頭減塑，需要您進一步的支持，一起為減塑拿下更多里程碑！</p>
+      </div>
+      <div class="counting-bar-container">
+        <div class="counting-bar-out">
+          <el-progress :stroke-width="22" :percentage="percent" :show-text="false" :color="barColor"></el-progress>
+        </div>
+        <div class="counting-text">
+          <p>連署人數： <span class="inlight">{{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</span></p>
+          <p>號召更多朋友參與，達到目標： <span class="inlight">{{goal.toLocaleString()}}</span></p>
+        </div>
+      </div>
+      <div class="btn-container">
+        <el-row :gutter="24">
+          <el-col :xs="{span: 18, offset: 3}" :sm="{span: 12}">
+            <el-button round class="fb-share-btn" @click="share">
+              FACEBOOK分享
+            </el-button>
+          </el-col>
+          <el-col class="is-hidden-at-dd-page-only" :xs="{span: 18, offset: 3}" :sm="{span: 12}">
+            <el-button round class="donate-btn is-hidden-at-dd-page-only" @click="toDonate">
+              捐款支持
+            </el-button>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Blank',
+  props: {
+    msg: String
+  },
+  data() {
+    return {
+      total: 0,
+      percent: 0,
+      goal: 200000,
+      barColor: '#eb9062',
+    }
+  },
+  created() {
+    this.getPetitionNumber();
+    
+    $(function() {
+      //tracking code
+      window.dataLayer = window.dataLayer || [];
+
+      dataLayer.push({
+          'event': 'gaEvent',
+          'eventCategory': 'petitions',
+          'eventAction': 'signup',
+          'eventLabel': '2019-plastic_retailer',
+          'eventValue' : undefined
+      });
+
+      dataLayer.push({
+          'event': 'fbqEvent',
+          'contentName': '2019-plastic_retailer',
+          'contentCategory': 'Petition Signup'
+      });
+    });
+  },
+  mounted() {
+    this.hideDdBtn();
+  },
+  methods: {
+    async getPetitionNumber() {
+      let numSignupTarget = parseInt(document.querySelector('input[name="numSignupTarget"]').value, 10),
+        numResponses = parseInt(document.querySelector('input[name="numResponses"]').value, 10)
+      
+      // use the default values if something wrong      
+      if (numResponses < 191834)
+        numResponses += 191835;
+      if (isNaN(numSignupTarget) || numResponses > numSignupTarget)
+        numSignupTarget = Math.ceil(numResponses / 10000) * 10000;
+
+      this.total = numResponses
+      this.percent = numResponses/numSignupTarget*100
+      this.goal = numSignupTarget
+    },
+    share() {
+      let title = '超市減塑，誰當先鋒 | 綠色和平'
+      let text = '立即連署，要求十大零售通路，減少塑膠包裝！'
+      let url = "https://cloud.greentw.greenpeace.org/petition-plastics-retailer?utm_campaign=2019-plastic_retailer&utm_source=facebook&utm_medium=social&utm_content=petition_thankyou_page"
+
+      if (navigator.share) {
+        navigator.share({
+            title,
+            text,
+            url,
+        }).catch((error) => console.log('Error sharing', error));
+      } else {
+        // console.log(url)
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "pop", "width=600, height=400, scrollbars=no");
+      }
+    },
+    toDonate() {
+      let donateLink = 'https://supporter.ea.greenpeace.org/tw/s/donate?campaign=plastics&ref=2019-plastic_retailer_thankyou_page';
+      window.open(donateLink, '_blank');
+    },
+    hideDdBtn() {
+      //隱藏dd頁面的捐款按鈕
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      if (urlParams.get('utm_source') === "dd") {
+          $('.is-hidden-at-dd-page-only').hide();
+      }
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.thank {
+  p {
+    margin: unset;
+  }
+  .inlight {
+    color: #eb9062;
+  }
+  box-shadow: 10px -5px 15px 0 rgba(214, 207, 207, 0.5);
+  background-color: #f9f9f9;
+  letter-spacing: 3pt;
+  .content-container {
+    padding: 5% 14%;
+    color: #644837;
+    .title {
+      width: 100%;
+      text-align: center;
+      color: #eb9062;
+      font-size: 4rem;
+      margin-bottom: 5%;
+    }
+    .subtitle {
+      width: 100%;
+      text-align: center;
+      color: #a5a5a5;
+      margin-bottom: 15%;
+    }
+    .text-1 {
+      margin-bottom: 10%;
+      line-height: 1.4;
+    }
+    .counting-bar-container {
+      padding-top: 10%;
+      .counting-bar-out {
+        border: 1px solid black;
+        padding: 5px;
+        background-color: white;
+        border-radius: 20px;
+        width: 100%;
+        .counting-bar-in {
+          border-radius: 20px;
+          background-color: #eb9062;
+          width: 80%;
+          height: 20px;
+        }
+      }
+      .counting-text {
+        line-height: 1.4;
+        padding-top: 25px;
+      }
+    }
+    .btn-container {
+      padding-top: 10%;
+      padding-bottom: 8%;
+      .fb-share-btn {
+        border-radius: 50px;
+        font-size: 1.2rem;
+        color: white;
+        background-color: #eb9062;
+        width: 100%;
+        padding: 8% 20%;
+      }
+      .donate-btn {
+        width: 100%;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        color: white;
+        background-color: #ffc91c;
+        padding: 8% 20%;
+      }
+    }
+  }
+}
+@media (max-width: 1919px) and (min-width: 992px) {
+  .thank {
+    .content-container {
+      .btn-container {
+        .fb-share-btn {
+          padding: 8% 10%;
+        }
+        .donate-btn {
+          padding: 8% 10%;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 991px) {
+  .thank {
+    margin-top: -52vh;
+    padding-top: 54vh;
+    .content-container {
+      .btn-container {
+        .fb-share-btn {
+          letter-spacing: 3pt;
+          padding: 8% 10%;
+          margin-bottom: 10%;
+        }
+        .donate-btn {
+          letter-spacing: 3pt;
+          padding: 8% 10%;
+        }
+      }
+    }
+  }
+}
+</style>

@@ -1,0 +1,18 @@
+<html>
+<body>
+<script>
+var target = "https://cloud.greentw.greenpeace.org/petition-plastics-retailer";
+var targetTokens = target.split("?"); // support query string in target in the URL
+var base = targetTokens[0];
+var urlParams = new URLSearchParams(window.location.search);
+(new URLSearchParams(targetTokens[1])).forEach(function (v,k) {
+	urlParams.set(k, v); // append the params from the target URL
+})
+var newHref = base;
+if (Array.from(urlParams).length > 0) {
+    newHref += "?" + urlParams.toString(); // append all the params 
+}
+window.location.href = newHref // do redirect
+</script>
+</body>
+</html>
