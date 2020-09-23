@@ -348,7 +348,7 @@ export default {
       this.$emit("displayCover");
       
       if (this.isDDPage && !this.ruleForm.phoneNumber) {
-        this.ruleForm.phoneNumber = "0900000000"
+        this.ruleForm.phoneNumber = ""
       }
       // modify the original form
       $('#mc-form [name="Email"]').value = this.ruleForm.email;
