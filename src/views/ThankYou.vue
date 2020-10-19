@@ -25,7 +25,7 @@
       <div class="btn-container">
         <el-row :gutter="24">
           <el-col :xs="{span: 18, offset: 3}" :sm="{span: 12}">
-            <el-button round class="fb-share-btn" @click="share">
+            <el-button round class="fb-share-btn share-button share-button__fb" @click="share">
               FACEBOOK分享
             </el-button>
           </el-col>
